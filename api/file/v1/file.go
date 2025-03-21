@@ -11,3 +11,10 @@ type UploadReq struct {
 }
 type UploadRes struct {
 }
+
+type DownloadReq struct {
+	g.Meta `path:"/download" tags:"file" method:"post" summary:"上传文件"`
+	filein.DownloadInp
+}
+type DownloadRes struct {
+}

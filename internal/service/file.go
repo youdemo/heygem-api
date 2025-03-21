@@ -13,6 +13,7 @@ import (
 type (
 	IFile interface {
 		Upload(ctx context.Context, inp *filein.UploadInp) (err error)
+		Download(ctx context.Context, inp *filein.DownloadInp) (err error)
 	}
 )
 

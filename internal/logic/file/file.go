@@ -3,7 +3,10 @@ package file
 import (
 	"context"
 	"github.com/gogf/gf/v2/encoding/gbase64"
+	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gfile"
+	"heygem-file/internal/boot"
+	"heygem-file/internal/consts"
 	"heygem-file/internal/model/input/filein"
 	"heygem-file/internal/service"
 )
@@ -16,17 +19,29 @@ func init() {
 }
 
 func (s *sFile) Upload(ctx context.Context, inp *filein.UploadInp) (err error) {
-
-	fileName := gfile.Basename(inp.Path)
-	if inp.FileType == "video" {
-		fileName = "/data/models/heygem/data/voice/data/" + fileName
+	g.Log().Info(ctx, inp.Path)
+	remoteFilePath := ""
+	if inp.FileType == consts.AudioType {
+		remoteFilePath = boot.AudioPath + inp.Path
 	} else {
-		fileName = "/data/models/heygem/data/face2face/" + fileName
+		remoteFilePath = boot.VideoPath + inp.Path
 	}
-	// 上传文件到远程服务器
-	remoteFilePath := fileName
 	// 解析文件
 	fileContent := gbase64.MustDecodeString(inp.File)
 	// 创建文件
 	return gfile.PutBytes(remoteFilePath, fileContent)
+}
+
+func (s *sFile) Download(ctx context.Context, inp *filein.DownloadInp) (err error) {
+	g.Log().Info(ctx, inp.Path)
+	remoteFilePath := ""
+	if inp.FileType == consts.AudioType {
+		remoteFilePath = boot.AudioPath + inp.Path
+	} else {
+		remoteFilePath = boot.VideoPath + inp.Path
+	}
+	// 解析文件
+	g.RequestFromCtx(ctx).Response.ServeFileDownload(remoteFilePath)
+	// 创建文件
+	return
 }

@@ -6,3 +6,8 @@ type UploadInp struct {
 	FileType string `json:"fileType" dc:"文件类型"`
 	Path     string `json:"path" dc:"文件路径"`
 }
+
+type DownloadInp struct {
+	FileType string `json:"fileType" dc:"文件类型"`
+	Path     string `json:"path" dc:"文件路径"`
+}

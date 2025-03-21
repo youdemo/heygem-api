@@ -1,6 +1,7 @@
 package main
 
 import (
+	"heygem-file/internal/boot"
 	_ "heygem-file/internal/packed"
 
 	_ "heygem-file/internal/logic"
@@ -11,5 +12,7 @@ import (
 )
 
 func main() {
-	cmd.Main.Run(gctx.GetInitCtx())
+	ctx := gctx.GetInitCtx()
+	boot.Init(ctx)
+	cmd.Main.Run(ctx)
 }

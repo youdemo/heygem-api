@@ -1,5 +1,5 @@
 server:
-  address: ":8000"
+  address:     ":8000"
   openapiPath: "/api.json"
   swaggerPath: "/swagger"
   maxHeaderBytes: "100KB"                     # 请求头大小限制，请求头包括客户端提交的Cookie数据，默认设置为100KB
@@ -7,9 +7,9 @@ server:
 
 # https://goframe.org/docs/core/glog-config
 logger:
-  level: "all"
+  level : "all"
   stdout: true
 
 path:
-  audio: '/app/data/voice/'
-  video: '/app/data/face2face/'
+  audio: 'data/models/heygem/data/voice/data/'
+  video: 'data/models/heygem/data/face2face/'
