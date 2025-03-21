@@ -1,5 +1,5 @@
 # 第一阶段：编译 Go 服务
-FROM golang:latest AS builder
+FROM golang:1.24.1-alpine3.21 AS builder
 
 WORKDIR /app
 
@@ -12,7 +12,7 @@ RUN go build -o ./linux_amd64/heygem-file main.go
 
 
 # 从 builder 阶段复制编译好的二进制文件
-FROM loads/alpine:3.8
+FROM alpine:latest
 
 ###############################################################################
 #                                INSTALLATION
