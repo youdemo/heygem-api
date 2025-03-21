@@ -25,7 +25,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: registry.aliyuncs.com/it00021hot/${{ github.repository }}
+          images: registry.aliyuncs.com/${{ github.repository }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
