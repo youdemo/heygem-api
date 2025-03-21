@@ -11,5 +11,5 @@ logger:
   stdout: true
 
 path:
-  audio: 'data/models/heygem/data/voice/data/'
-  video: 'data/models/heygem/data/face2face/'
+  audio: '/app/data/voice/'
+  video: '/app/data/face2face/'
