@@ -10,7 +10,7 @@ services:
     restart: always
     privileged: true
     volumes:
-      - /data/models/heygem/data/face2face:/app/data/face2face
+      - /data/models/heygem/data/face2face:/code/data
     environment:
       - PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512
     deploy:

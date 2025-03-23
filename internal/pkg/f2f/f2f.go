@@ -4,18 +4,18 @@ import (
 	"context"
 	"github.com/gogf/gf/v2/encoding/gjson"
 	"github.com/gogf/gf/v2/frame/g"
-	"github.com/gogf/gf/v2/text/gstr"
 	"heygem-api/internal/boot"
 	"heygem-api/internal/consts"
 	"heygem-api/internal/model"
+	util "heygem-api/utility"
 )
 
 func Submit(ctx context.Context, code string, audioPath string, videoPath string) (param map[string]interface{}, res *gjson.Json, err error) {
 	// 调用api解析语音文本
 	param = g.Map{
 		"code":             code,
-		"audio_url":        gstr.Join([]string{consts.CodeData, audioPath}, "/"),
-		"video_url":        gstr.Join([]string{consts.CodeData, videoPath}, "/"),
+		"audio_url":        util.NewBuilder().Append(consts.CodeData).Append(audioPath).String(),
+		"video_url":        util.NewBuilder().Append(consts.CodeData).Append(videoPath).String(),
 		"chaofen":          0,
 		"watermark_switch": 0,
 		"pn":               1,
