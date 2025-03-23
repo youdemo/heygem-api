@@ -19,8 +19,6 @@ services:
           devices:
             - capabilities: ["gpu"]
               driver: "nvidia"
-    ports:
-      - '8383:8383'
     command: python /code/app_local.py
     networks:
       - ai_network
@@ -39,22 +37,20 @@ services:
           devices:
             - capabilities: ["gpu"]
               driver: "nvidia"
-    ports:
-      - '7861:7861'
     networks:
       - ai_network
   mysql:
-    image: mysql
+    image: registry.cn-hangzhou.aliyuncs.com/it00021hot/mysql
     container_name: mysql
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=111111
-    ports:
-      - '3306:3306'
     volumes:
       - /data/models/heygem/data/mysql:/var/lib/mysql
       - ./mysql/my.cnf:/etc/mysql/my.cnf
       - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - ai_network
   heygem-api:
     image: registry.cn-hangzhou.aliyuncs.com/it00021hot/heygem-api:v0.0.2
     container_name: heygem-api

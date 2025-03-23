@@ -66,6 +66,6 @@ database:
 heygem:
   path:
     video: '/app/resource/public'
-  tts: http://10.8.5.210:7861
-  f2f: http://127.0.0.1:8383/easy
+  tts: http://f5-tts:7861
+  f2f: http://heygem-f2f:8383/easy
 
