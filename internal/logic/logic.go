@@ -5,5 +5,8 @@
 package logic
 
 import (
-	_ "heygem-file/internal/logic/file"
+	_ "heygem-api/internal/logic/model"
+	_ "heygem-api/internal/logic/tts"
+	_ "heygem-api/internal/logic/video"
+	_ "heygem-api/internal/logic/voice"
 )

@@ -2,7 +2,10 @@ package cmd
 
 import (
 	"context"
-	"heygem-file/internal/controller/file"
+	"heygem-api/internal/controller/model"
+	"heygem-api/internal/controller/tts"
+	"heygem-api/internal/controller/video"
+	"heygem-api/internal/controller/voice"
 
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
@@ -18,12 +21,21 @@ var (
 			s := g.Server()
 			s.Group("/v1", func(group *ghttp.RouterGroup) {
 				group.Middleware(ghttp.MiddlewareHandlerResponse)
-				group.Bind(
-					file.NewV1(),
-				)
+				group.Group("/model", func(group *ghttp.RouterGroup) {
+					group.Bind(model.NewV1())
+				})
+				group.Group("/voice", func(group *ghttp.RouterGroup) {
+					group.Bind(voice.NewV1())
+				})
+				group.Group("/tts", func(group *ghttp.RouterGroup) {
+					group.Bind(tts.NewV1())
+				})
+				group.Group("/video", func(group *ghttp.RouterGroup) {
+					group.Bind(video.NewV1())
+				})
 			})
 			s.Run()
-			return nil
+			return
 		},
 	}
 )

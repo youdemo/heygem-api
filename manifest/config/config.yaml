@@ -1,15 +1,74 @@
 server:
-  address: ":8000"
-  openapiPath: "/api.json"
-  swaggerPath: "/swagger"
+  name: "heygem-api"
+  address: ":8000"                            # 本地监听地址。默认":8000"，多个地址以","号分隔。例如："192.168.2.3:8000,10.0.3.10:8001"
+  openapiPath: "/docs/api.json"                    # OpenAPI接口文档地址
+  swaggerPath: "/docs/swagger"                     # 内置SwaggerUI展示地址
+  serverRoot: "D:/heygem_data/face2face"               # 静态文件服务的目录根路径，配置时自动开启静态文件服务。
+  DumpRouterMap: true                        # 是否在Server启动时打印所有的路由列表。
+  logPath: "logs/server"                      # 服务日志保存路径
+  ErrorStack: true                            # 当Server捕获到异常时是否记录堆栈信息到日志中。默认为true
+  ErrorLogEnabled: true                       # 是否记录异常日志信息到日志中。默认为true
+  errorLogPattern: "error/{Y-m-d}.log"        # 异常错误日志文件格式。默认为"error-{Ymd}.log"
+  accessLogEnabled: true                      # 是否记录访问日志。默认为false
+  accessLogPattern: "access/{Y-m-d}.log"      # 访问日志文件格式。默认为"access-{Ymd}.log"
   maxHeaderBytes: "100KB"                     # 请求头大小限制，请求头包括客户端提交的Cookie数据，默认设置为100KB
   clientMaxBodySize: "200MB"                  # 客户端提交的Body大小限制，同时也影响文件上传大小，默认设置为200MB
+  serverAgent: "HG HTTP Server"               # 服务端Agent信息。默认为"HG HTTP Server"
+  # PProf配置
+  pprofEnabled: false                          # 是否开启PProf性能调试特性。默认为false
+  pprofPattern: "/pprof"                      # 开启PProf时有效，表示PProf特性的页面访问路径，对当前Server绑定的所有域名有效。
+  # 服务日志配置
+  logger:
+    level: "all"
+    flags: 42
+    rotateExpire: "7d"                      # 日志保留天数
+    rotateBackupLimit: 2                    # 最大备份数量
+    rotateBackupCompress: 2                 # 日志文件压缩级别，0-9,9最高
 
-# https://goframe.org/docs/core/glog-config
-logger:
+
+# 统一默认日志配置
+
+defaultLogger: &defaultLogger
   level: "all"
-  stdout: true
+  flags: 42
+  file: "{Y-m-d}.log"                     # 日志文件格式。默认为"{Y-m-d}.log"
+  stdoutColorDisabled: false              # 关闭终端的颜色打印。默认开启
+  writerColorEnable: false                # 日志文件是否带上颜色。默认false，表示不带颜色
+  rotateExpire: "7d"                      # 日志保留天数
+  rotateBackupLimit: 2                    # 最大备份数量
+  rotateBackupCompress: 2                 # 日志文件压缩级别，0-9,9最高
+  stStatus: 1
 
-path:
-  audio: 'data/models/heygem/data/voice/data/'
-  video: 'data/models/heygem/data/face2face/'
+
+# 日志配置
+
+logger:
+  # 全局日志：g.Log()
+  path: "logs/logger"                       # 日志文件路径。默认为空，表示关闭，仅输出到终端
+  <<: *defaultLogger
+  # 定时任务：g.Log("cron")
+  cron:
+    path: "logs/cron"                       # 日志文件路径。默认为空，表示关闭，仅输出到终端
+    <<: *defaultLogger
+
+# Database. 配置参考：https://goframe.org/pages/viewpage.action?pageId=1114245
+
+database:
+  logger:
+    path: "logs/db"                       # 日志文件路径。默认为空，表示关闭，仅输出到终端
+    <<: *defaultLogger
+  default:
+    link: "mysql:root:111111@tcp(127.0.0.1:3306)/heygem?loc=Local&parseTime=true"
+    maxIdle: "30" # (可选)连接池最大闲置的连接数(默认10)
+    maxOpen: "200" # (可选)连接池最大打开的连接数(默认无限制)
+    debug: true
+
+
+
+heygem:
+  path:
+    audio: 'D:/heygem_data/voice/data'
+    video: 'D:/heygem_data/face2face'
+  tts: http://10.8.5.210:7861
+  f2f: http://127.0.0.1:8383/easy
+

@@ -42,3 +42,5 @@ npm run build:win
 # mac 
 npm run build:mac
 ```
+# heygem分布式改造
+- 客户端移除ffmpeg，在api服务进行音视频分离

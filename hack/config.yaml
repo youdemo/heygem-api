@@ -1,14 +1,23 @@
-
 # CLI tool, only in development environment.
 # https://goframe.org/docs/cli
 gfcli:
   build:
-    name: "heygem-file"                          # 编译后的可执行文件名称
+    name: "heygem-api"                          # 编译后的可执行文件名称
     arch: "amd64"                           #不填默认当前系统架构，可选：386,amd64,arm,all
     system: "linux"                         #不填默认当前系统平台，可选：linux,darwin,windows,all
     mod: "none"
 
-  docker:
-    build: "-a amd64 -s linux -p temp -ew"
-    tagPrefixes:
-      - my.image.pub/my-app
+  gen:
+    dao:
+      - link: "mysql:root:111111@tcp(127.0.0.1:3306)/heygem?loc=Local&parseTime=true"
+        group: "default"                                                # 分组
+        tablesEx: ""                        # 指定当前数据库中需要排除代码生成的数据表。
+        descriptionTag: true
+        noModelComment: true
+        jsonCase: "CamelLower"
+        gJsonSupport: true
+        clear: false
+        removePrefix: "hg_"
+    pbentity:
+      - link: "mysql:root:111111@tcp(127.0.0.1:3306)/heygem?loc=Local&parseTime=true"
+        nameCase: "CamelLower"

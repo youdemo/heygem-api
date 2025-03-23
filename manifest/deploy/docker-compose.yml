@@ -4,71 +4,65 @@ networks:
     driver: bridge
 
 services:
-  heygem-tts:
-    image: registry.cn-hangzhou.aliyuncs.com/it00021hot/guiji2025_fish-speech-ziming
-    container_name: heygem-tts
-    restart: always
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - device_ids: ["0","1"]
-              capabilities: ["gpu"]
-              driver: "nvidia"
-    ports:
-      - '18180:8080'
-    volumes:
-      - /data/models/heygem/data/voice/data:/code/data
-    command: /bin/bash -c "/opt/conda/envs/python310/bin/python3 tools/api_server.py --listen 0.0.0.0:8080"
-    networks:
-      - ai_network
-  heygem-asr:
-    image: registry.cn-hangzhou.aliyuncs.com/it00021hot/guiji2025_fun-asr
-    container_name: heygem-asr
-    restart: always
-    privileged: true
-    working_dir: /workspace/FunASR/runtime
-    ports:
-      - '10095:10095'
-    command: sh /run.sh
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - device_ids: ["0","1"]
-              capabilities: ["gpu"]
-              driver: "nvidia"
-    networks:
-      - ai_network
   heygem-f2f:
     image: registry.cn-hangzhou.aliyuncs.com/it00021hot/guiji2025_heygem.ai
     container_name: heygem-f2f
     restart: always
     privileged: true
     volumes:
-      - /data/models/heygem/data/face2face:/code/data
+      - /data/models/heygem/data/face2face:/app/data/face2face
     environment:
       - PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512
     deploy:
       resources:
         reservations:
           devices:
-            - device_ids: ["0","1"]
-              capabilities: ["gpu"]
+            - capabilities: ["gpu"]
               driver: "nvidia"
     ports:
       - '8383:8383'
     command: python /code/app_local.py
     networks:
       - ai_network
-  heygem-file:
-    image: registry.cn-hangzhou.aliyuncs.com/it00021hot/heygem-file:v0.0.2
-    container_name: heygem-file
+  f5-tts:
+    image: registry.cn-hangzhou.aliyuncs.com/it00021hot/f5-tts:heygem
+    container_name: f5-tts
     restart: always
     privileged: true
     volumes:
-      - /data/models/heygem/data/face2face:/app/data/face2face
-      - /data/models/heygem/data/voice/data:/app/data/voice
+      - /root/.cache/huggingface/hub:/root/.cache/huggingface/hub/
+    environment:
+      - PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: ["gpu"]
+              driver: "nvidia"
+    ports:
+      - '7861:7861'
+    networks:
+      - ai_network
+  mysql:
+    image: mysql
+    container_name: mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=111111
+    ports:
+      - '3306:3306'
+    volumes:
+      - /data/models/heygem/data/mysql:/var/lib/mysql
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+  heygem-api:
+    image: registry.cn-hangzhou.aliyuncs.com/it00021hot/heygem-api:v0.0.2
+    container_name: heygem-api
+    restart: always
+    privileged: true
+    volumes:
+      - ../config/config.docker.yaml:/app/config.yaml
+      - /data/models/heygem/data/face2face:/app/resource/public
     ports:
       - '8000:8000'
     networks:

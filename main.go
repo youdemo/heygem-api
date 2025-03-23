@@ -1,14 +1,14 @@
 package main
 
 import (
-	"heygem-file/internal/boot"
-	_ "heygem-file/internal/packed"
-
-	_ "heygem-file/internal/logic"
+	_ "github.com/gogf/gf/contrib/drivers/mysql/v2"
+	"heygem-api/internal/boot"
+	_ "heygem-api/internal/logic"
+	_ "heygem-api/internal/packed"
 
 	"github.com/gogf/gf/v2/os/gctx"
 
-	"heygem-file/internal/cmd"
+	"heygem-api/internal/cmd"
 )
 
 func main() {
