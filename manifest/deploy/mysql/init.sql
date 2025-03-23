@@ -1,5 +1,6 @@
 create database if not exists heygem;
 
+use heygem;
 -- auto-generated definition
 create table if not exists model
 (
