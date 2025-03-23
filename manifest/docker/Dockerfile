@@ -12,7 +12,7 @@ RUN go build -o ./linux_amd64/heygem-api main.go
 
 
 # 从 builder 阶段复制编译好的二进制文件
-FROM alpine:latest
+FROM registry.cn-hangzhou.aliyuncs.com/it00021hot/alpine:latest-ffmpeg
 
 ###############################################################################
 #                                INSTALLATION
@@ -23,7 +23,6 @@ ENV APP_NAME                  heygem-api
 ADD manifest/config/config.docker.yaml $WORKDIR/config.yaml
 COPY --from=builder /app/linux_amd64/$APP_NAME $WORKDIR/$APP_NAME
 RUN chmod +x $WORKDIR/$APP_NAME
-RUN apk update && apk add --no-cache yasm ffmpeg && rm -rf /var/cache/apk/*
 
 
 ###############################################################################

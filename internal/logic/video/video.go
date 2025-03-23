@@ -8,7 +8,6 @@ import (
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gfile"
 	"github.com/gogf/gf/v2/os/gtime"
-	"github.com/gogf/gf/v2/os/gtimer"
 	"github.com/gogf/gf/v2/util/grand"
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 	"heygem-api/internal/boot"
@@ -24,7 +23,6 @@ import (
 	"slices"
 	"strconv"
 	"strings"
-	"time"
 )
 
 type sVideo struct{}
@@ -189,11 +187,6 @@ func (s *sVideo) MakeByF2F(ctx context.Context, id int64) (err error) {
 
 // LoopPending 处理未合成的视频
 func (s *sVideo) LoopPending(ctx context.Context) {
-	defer func(ctx context.Context) {
-		gtimer.SetTimeout(ctx, 5*time.Second, func(ctx context.Context) {
-			s.LoopPending(ctx)
-		})
-	}(ctx)
 	var pendingVideo *entity.Video
 	_ = dao.Video.Ctx(ctx).Where(do.Video{Status: consts.StatusPending}).Scan(&pendingVideo)
 	if pendingVideo == nil {
