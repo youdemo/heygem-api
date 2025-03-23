@@ -8,7 +8,7 @@ COPY . .
 RUN go mod tidy
 
 # 复制源码并编译
-RUN go build -o ./linux_amd64/heygem-api main.go
+RUN go build -tags netgo -o ./linux_amd64/heygem-api main.go
 
 
 # 从 builder 阶段复制编译好的二进制文件
