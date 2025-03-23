@@ -23,7 +23,7 @@ ENV APP_NAME                  heygem-api
 ADD manifest/config/config.docker.yaml $WORKDIR/config.yaml
 COPY --from=builder /app/linux_amd64/$APP_NAME $WORKDIR/$APP_NAME
 RUN chmod +x $WORKDIR/$APP_NAME
-RUN apk update && apk add --no-cache yasm ffmpeg
+RUN apk update && apk add --no-cache yasm ffmpeg && rm -rf /var/cache/apk/*
 
 
 ###############################################################################

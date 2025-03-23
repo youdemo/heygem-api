@@ -77,7 +77,7 @@ func (s *sModel) Add(ctx context.Context, inp *modelin.AddInp) (res *modelin.Add
 		return nil, err
 	}
 	modelPath := util.NewBuilder().Append(util.Separator).Append(util.JoinPaths(consts.Model, dayDir, filename)).String()
-	inputFile := util.JoinPaths(boot.VideoPath, modelPath)
+	inputFile := boot.VideoPath + modelPath
 
 	outputName := strings.ToLower(strconv.FormatInt(gtime.TimestampNano(), 36) + grand.S(6))
 	// 输出音频文件路径
@@ -85,6 +85,10 @@ func (s *sModel) Add(ctx context.Context, inp *modelin.AddInp) (res *modelin.Add
 	audioPath := util.NewBuilder().Append(util.Separator).Append(util.JoinPaths(consts.Voice, dayDir, outputAudio)).String()
 	// 输出视频文件路径（无音频）
 	// 分离音频
+	outputAudioDir := util.JoinPaths(boot.VideoPath, consts.Voice, dayDir)
+	if !gfile.Exists(outputAudioDir) {
+		_ = gfile.Mkdir(util.JoinPaths(boot.VideoPath, consts.Voice, dayDir))
+	}
 	err = ffmpeg.Input(inputFile).
 		Output(util.JoinPaths(boot.VideoPath, consts.Voice, dayDir, outputAudio), ffmpeg.KwArgs{"q:a": 0, "map": "a"}).
 		Run()
