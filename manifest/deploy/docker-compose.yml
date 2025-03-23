@@ -52,7 +52,7 @@ services:
     networks:
       - ai_network
   heygem-api:
-    image: registry.cn-hangzhou.aliyuncs.com/it00021hot/heygem-api:v0.0.2
+    image: registry.cn-hangzhou.aliyuncs.com/it00021hot/heygem-api:api
     container_name: heygem-api
     restart: always
     privileged: true
