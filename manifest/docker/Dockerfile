@@ -43,7 +43,7 @@ ENV APP_NAME                  heygem-api
 ADD resource                  $WORKDIR/resource
 ADD manifest/config/config.docker.yaml $WORKDIR/config.yaml
 COPY --from=builder /app/linux_amd64/$APP_NAME $WORKDIR/$APP_NAME
-COPY --from=web     /app/dist/*       $WORKDIR/resource/public
+COPY --from=web     /app/HeyGem.ai/dist/*       $WORKDIR/resource/public
 RUN chmod +x $WORKDIR/$APP_NAME
 
 
