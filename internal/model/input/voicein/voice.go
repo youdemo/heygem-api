@@ -20,6 +20,7 @@ type SaveInp struct {
 	File      *ghttp.UploadFile `json:"file" type:"file" dc:"语音"`
 	Name      string            `json:"name"             dc:"名称"`
 	AudioText string            `json:"audioText"        dc:"语音文本"`
+	Save      bool              `json:"save"             dc:"是否保存"`
 }
 
 type SaveOut struct {

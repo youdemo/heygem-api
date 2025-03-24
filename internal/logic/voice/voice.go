@@ -50,27 +50,34 @@ func (s *sVoice) Find(ctx context.Context, id int64) (res *entity.Voice, err err
 
 func (s *sVoice) Save(ctx context.Context, inp *voicein.SaveInp) (res *voicein.SaveOut, err error) {
 	dayDir := gtime.Now().Format(consts.DayDir)
-
-	filename, err := inp.File.Save(util.JoinPaths(boot.VideoPath, consts.Voice, dayDir), true)
-	inp.AudioText, err = tts.Train(ctx, util.JoinPaths(boot.VideoPath, consts.Voice, dayDir, filename))
-	if err != nil {
-		err = gerror.Wrap(err, "解析语音失败")
-		return
+	var filename string
+	if inp.Save {
+		filename, err = inp.File.Save(util.JoinPaths(boot.VideoPath, consts.Voice, dayDir), true)
+		audioPath := util.NewBuilder().Append(util.Separator).Append(util.JoinPaths(consts.Voice, dayDir, filename)).String()
+		res = &voicein.SaveOut{AudioPath: audioPath}
+		inp.AudioText, err = tts.Train(ctx, util.JoinPaths(boot.VideoPath, consts.Voice, dayDir, filename))
+		if err != nil {
+			err = gerror.Wrap(err, "解析语音失败")
+			return
+		}
+		data := do.Voice{
+			Name:      inp.Name,
+			AudioPath: audioPath,
+			AudioText: inp.AudioText,
+		}
+		if inp.Name == "" {
+			data.Name = gfile.Name(inp.File.Filename)
+		}
+		// 添加语音
+		id, err := dao.Voice.Ctx(ctx).Data(data).InsertAndGetId()
+		if err != nil {
+			return nil, err
+		}
+		res.Id = id
+		return res, nil
 	}
-	audioPath := "/" + consts.Voice + "/" + dayDir + "/" + filename
-	data := do.Voice{
-		Name:      inp.Name,
-		AudioPath: audioPath,
-		AudioText: inp.AudioText,
-	}
-	if inp.Name == "" {
-		data.Name = gfile.Name(inp.File.Filename)
-	}
-	// 添加语音
-	id, err := dao.Voice.Ctx(ctx).Data(data).InsertAndGetId()
-	if err != nil {
-		return
-	}
-	res = &voicein.SaveOut{Id: id, AudioPath: audioPath}
+	filename, err = inp.File.Save(util.JoinPaths(boot.VideoPath, consts.Temp, dayDir), true)
+	audioPath := util.NewBuilder().Append(util.Separator).Append(util.JoinPaths(consts.Temp, dayDir, filename)).String()
+	res = &voicein.SaveOut{AudioPath: audioPath}
 	return
 }
