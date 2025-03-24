@@ -67,7 +67,6 @@ database:
 
 heygem:
   path:
-    audio: 'D:/heygem_data/voice/data'
     video: 'D:/heygem_data/face2face'
   tts: http://10.8.5.210:7861
   f2f: http://127.0.0.1:8383/easy

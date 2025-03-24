@@ -11,6 +11,25 @@ RUN go mod tidy
 RUN go build -tags netgo -o ./linux_amd64/heygem-api main.go
 
 
+FROM node:alpine3.21 AS web
+
+RUN apk update && apk add git
+RUN npm install -g pnpm
+
+ENV WORKDIR                   /app
+WORKDIR                       $WORKDIR
+# 安装前端
+RUN git clone https://github.com/it00021hot/HeyGem.ai.git -b web \
+    && cd HeyGem.ai \
+    && pnpm install \
+    && pnpm run build \
+
+
+
+
+
+
+
 # 从 builder 阶段复制编译好的二进制文件
 FROM registry.cn-hangzhou.aliyuncs.com/it00021hot/alpine:latest-ffmpeg
 
@@ -20,8 +39,10 @@ FROM registry.cn-hangzhou.aliyuncs.com/it00021hot/alpine:latest-ffmpeg
 
 ENV WORKDIR                   /app
 ENV APP_NAME                  heygem-api
+ADD resource                  $WORKDIR/resource
 ADD manifest/config/config.docker.yaml $WORKDIR/config.yaml
 COPY --from=builder /app/linux_amd64/$APP_NAME $WORKDIR/$APP_NAME
+COPY --from=web     /app/dist/*       $WORKDIR/resource/public
 RUN chmod +x $WORKDIR/$APP_NAME
 
 
