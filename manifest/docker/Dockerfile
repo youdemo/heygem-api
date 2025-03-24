@@ -8,6 +8,7 @@ COPY . .
 RUN go mod tidy
 
 # 复制源码并编译
+ENV GOPROXY     https://goproxy.cn
 RUN go build -tags netgo -o ./linux_amd64/heygem-api main.go
 
 
@@ -20,11 +21,12 @@ WORKDIR                       $WORKDIR
 RUN apk update \
     && apk add git \
     && npm install -g pnpm \
-    && git clone https://github.com/it00021hot/HeyGem.ai.git -b web \
-    && cd HeyGem.ai \
-    && pnpm install \
-    && pnpm run build
+    && git clone https://github.com/it00021hot/HeyGem.ai.git -b web
 
+
+RUN  cd HeyGem.ai \
+         && pnpm install \
+         && pnpm run build
 
 
 
@@ -43,7 +45,7 @@ ENV APP_NAME                  heygem-api
 ADD resource                  $WORKDIR/resource
 ADD manifest/config/config.docker.yaml $WORKDIR/config.yaml
 COPY --from=builder /app/linux_amd64/$APP_NAME $WORKDIR/$APP_NAME
-COPY --from=web     /app/HeyGem.ai/dist/*       $WORKDIR/resource/public
+COPY --from=web     /app/HeyGem.ai/dist       $WORKDIR/resource
 RUN chmod +x $WORKDIR/$APP_NAME
 
 
