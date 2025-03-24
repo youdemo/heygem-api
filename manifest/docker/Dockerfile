@@ -13,16 +13,17 @@ RUN go build -tags netgo -o ./linux_amd64/heygem-api main.go
 
 FROM node:alpine3.21 AS web
 
-RUN apk update && apk add git
-RUN npm install -g pnpm
 
 ENV WORKDIR                   /app
 WORKDIR                       $WORKDIR
 # 安装前端
-RUN git clone https://github.com/it00021hot/HeyGem.ai.git -b web \
+RUN apk update \
+    && apk add git \
+    && npm install -g pnpm \
+    && git clone https://github.com/it00021hot/HeyGem.ai.git -b web \
     && cd HeyGem.ai \
     && pnpm install \
-    && pnpm run build \
+    && pnpm run build
 
 
 
