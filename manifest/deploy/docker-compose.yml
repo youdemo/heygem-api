@@ -30,6 +30,7 @@ services:
     volumes:
       - /root/.cache/huggingface/hub:/root/.cache/huggingface/hub/
     environment:
+      - HF_ENDPOINT=https://hf-mirror.com
       - PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512
     deploy:
       resources:
@@ -52,7 +53,7 @@ services:
     networks:
       - ai_network
   heygem-api:
-    image: registry.cn-hangzhou.aliyuncs.com/it00021hot/heygem-api:api
+    image: registry.cn-hangzhou.aliyuncs.com/it00021hot/heygem-api:v1.1.0
     container_name: heygem-api
     restart: always
     privileged: true
