@@ -59,7 +59,7 @@ services:
     container_name: heygem-api
     restart: always
     privileged: true
-    command: sh -c "mv /app/resource/assets /app/resource/public/ && mv /app/resource/favicon.ico /app/resource/public/ &&  mv /app/resource/index.html /app/resource/public/ && /app/heygem-api"
+    command: sh -c "rm -rf /app/resource/public/assets && mv /app/resource/assets /app/resource/public/ && mv /app/resource/favicon.ico /app/resource/public/ &&  mv /app/resource/index.html /app/resource/public/ && /app/heygem-api"
     volumes:
       - ../config/config.docker.yaml:/app/config.yaml
       - /data/models/heygem/data/face2face:/app/resource/public
