@@ -34,6 +34,7 @@ func Query(ctx context.Context, code string) (res *model.FaceResponse, err error
 	if err != nil {
 		return
 	}
-	err = gjson.New(resp.ReadAll()).Scan(&res)
+	_ = gjson.New(resp.ReadAll()).Scan(&res)
+	g.Log().Info(ctx, "查询任务：", code, "响应结果：", res)
 	return
 }
