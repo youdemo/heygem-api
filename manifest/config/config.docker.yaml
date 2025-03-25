@@ -65,7 +65,7 @@ database:
 
 heygem:
   web:
-    enabled: false
+    enabled: true
   path:
     video: '/app/resource/public'
   tts: http://f5-tts:7861
