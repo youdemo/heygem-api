@@ -26,4 +26,4 @@ fi
 
 # 启动 heygem-api 应用
 echo "启动 heygem-api ..."
-exec ./heygem-api
+exec /app/heygem-api
