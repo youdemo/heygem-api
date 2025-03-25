@@ -15,7 +15,7 @@ type PageRes struct {
 }
 
 type FindReq struct {
-	g.Meta `path:"/find" tags:"语音管理" method:"post" summary:"查找语音"`
+	g.Meta `path:"/find/:id" tags:"语音管理" method:"get" summary:"查找语音"`
 	Id     int64 `json:"id" v:"required"`
 }
 
@@ -31,3 +31,10 @@ type SaveReq struct {
 type SaveRes struct {
 	*voicein.SaveOut
 }
+
+type DelReq struct {
+	g.Meta `path:"/del/:id" tags:"语音管理" method:"delete" summary:"删除语音"`
+	Id     int64 `json:"id" v:"required"`
+}
+
+type DelRes struct{}

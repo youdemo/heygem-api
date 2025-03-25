@@ -16,6 +16,7 @@ type (
 		Page(ctx context.Context, inp *voicein.PageInp) (res *voicein.PageOut, err error)
 		Find(ctx context.Context, id int64) (res *entity.Voice, err error)
 		Save(ctx context.Context, inp *voicein.SaveInp) (res *voicein.SaveOut, err error)
+		Delete(ctx context.Context, id int64) (err error)
 	}
 )
 

@@ -33,3 +33,7 @@ func (c *ControllerV1) Save(ctx context.Context, req *v1.SaveReq) (res *v1.SaveR
 	res = &v1.SaveRes{SaveOut: out}
 	return
 }
+func (c *ControllerV1) Del(ctx context.Context, req *v1.DelReq) (res *v1.DelRes, err error) {
+	err = service.Voice().Delete(ctx, req.Id)
+	return
+}

@@ -14,4 +14,5 @@ type IVoiceV1 interface {
 	Page(ctx context.Context, req *v1.PageReq) (res *v1.PageRes, err error)
 	Find(ctx context.Context, req *v1.FindReq) (res *v1.FindRes, err error)
 	Save(ctx context.Context, req *v1.SaveReq) (res *v1.SaveRes, err error)
+	Del(ctx context.Context, req *v1.DelReq) (res *v1.DelRes, err error)
 }

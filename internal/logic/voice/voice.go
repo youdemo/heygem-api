@@ -81,3 +81,8 @@ func (s *sVoice) Save(ctx context.Context, inp *voicein.SaveInp) (res *voicein.S
 	res = &voicein.SaveOut{AudioPath: audioPath}
 	return
 }
+
+func (s *sVoice) Delete(ctx context.Context, id int64) (err error) {
+	_, err = dao.Voice.Ctx(ctx).WherePri(id).Delete()
+	return
+}
