@@ -83,6 +83,11 @@ func (s *sVoice) Save(ctx context.Context, inp *voicein.SaveInp) (res *voicein.S
 }
 
 func (s *sVoice) Delete(ctx context.Context, id int64) (err error) {
+	voice, err := s.Find(ctx, id)
+	if err != nil || voice == nil {
+		return
+	}
+	_ = gfile.RemoveFile(util.JoinPaths(boot.VideoPath, voice.AudioPath))
 	_, err = dao.Voice.Ctx(ctx).WherePri(id).Delete()
 	return
 }
