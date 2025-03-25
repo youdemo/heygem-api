@@ -206,11 +206,12 @@ func (s *sVideo) LoopPending(ctx context.Context) {
 		} else if res.Data.Status == 2 {
 			// 移动视频到result目录
 			dayDir := gtime.Now().Format(consts.DayDir)
-			filePath := util.NewBuilder().Append(boot.VideoPath).Append(util.JoinPaths(consts.Voice, dayDir, res.Data.Result)).String()
-			if !gfile.Exists(filePath) {
-				_ = gfile.Mkdir(filePath)
+			fileDir := util.NewBuilder().Append(util.Separator).Append(util.JoinPaths(consts.Voice, dayDir)).String()
+			filePath := fileDir + res.Data.Result
+			if !gfile.Exists(boot.VideoPath + fileDir) {
+				_ = gfile.Mkdir(boot.VideoPath + fileDir)
 			}
-			err = gfile.Move(util.JoinPaths(boot.VideoPath, consts.Temp, res.Data.Result), util.JoinPaths(boot.VideoPath, filePath))
+			err = gfile.Move(util.JoinPaths(boot.VideoPath, consts.Temp, res.Data.Result), boot.VideoPath+filePath)
 			if err != nil {
 				g.Log().Error(ctx, "移动视频失败", err.Error())
 				return
