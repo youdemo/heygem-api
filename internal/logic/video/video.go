@@ -206,7 +206,7 @@ func (s *sVideo) LoopPending(ctx context.Context) {
 		} else if res.Data.Status == 2 {
 			// 移动视频到result目录
 			dayDir := gtime.Now().Format(consts.DayDir)
-			filePath := util.NewBuilder().Append(util.Separator).Append(util.JoinPaths(consts.Voice, dayDir, res.Data.Result)).String()
+			filePath := util.NewBuilder().Append(boot.VideoPath).Append(util.JoinPaths(consts.Voice, dayDir, res.Data.Result)).String()
 			if !gfile.Exists(filePath) {
 				_ = gfile.Mkdir(filePath)
 			}
