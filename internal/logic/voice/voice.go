@@ -55,10 +55,12 @@ func (s *sVoice) Save(ctx context.Context, inp *voicein.SaveInp) (res *voicein.S
 		filename, err = inp.File.Save(util.JoinPaths(boot.VideoPath, consts.Voice, dayDir), true)
 		audioPath := util.NewBuilder().Append(util.Separator).Append(util.JoinPaths(consts.Voice, dayDir, filename)).String()
 		res = &voicein.SaveOut{AudioPath: audioPath}
-		inp.AudioText, err = tts.Train(ctx, util.JoinPaths(boot.VideoPath, consts.Voice, dayDir, filename))
-		if err != nil {
-			err = gerror.Wrap(err, "解析语音失败")
-			return
+		if inp.AudioText == "" {
+			inp.AudioText, err = tts.Train(ctx, util.JoinPaths(boot.VideoPath, consts.Voice, dayDir, filename))
+			if err != nil {
+				err = gerror.Wrap(err, "解析语音失败")
+				return
+			}
 		}
 		data := do.Voice{
 			Name:      inp.Name,
