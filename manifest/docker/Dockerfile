@@ -39,19 +39,20 @@ FROM registry.cn-hangzhou.aliyuncs.com/it00021hot/alpine:latest-ffmpeg
 ###############################################################################
 #                                INSTALLATION
 ###############################################################################
-
+WORKDIR $WORKDIR
 ENV WORKDIR                   /app
 ENV APP_NAME                  heygem-api
 ADD resource                  $WORKDIR/resource
+ADD manifest/docker/start.sh  $WORKDIR
 ADD manifest/config/config.docker.yaml $WORKDIR/config.yaml
 COPY --from=builder /app/linux_amd64/$APP_NAME $WORKDIR/$APP_NAME
 COPY --from=web     /app/HeyGem.ai/dist/       $WORKDIR/resource
 RUN chmod +xr $WORKDIR/$APP_NAME
+RUN chmod +xr $WORKDIR/start.sh
 
 
 ###############################################################################
 #                                   START
 ###############################################################################
 EXPOSE 8000
-WORKDIR $WORKDIR
-CMD ./$APP_NAME
+CMD $WORKDIR/start.sh
