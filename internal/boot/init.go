@@ -27,12 +27,12 @@ func Init(ctx context.Context) {
 func InitWeb(ctx context.Context) {
 	if g.Config().MustGet(ctx, "heygem.web.enabled").Bool() && gfile.Exists("/app/resource/assets") {
 		g.Log().Info(ctx, "移动前端文件")
-		if gfile.Exists("/app/resource/public/assets") {
-			_ = gfile.RemoveAll("/app/resource/public/assets")
+		if gfile.Exists("app/resource/public/assets") {
+			_ = gfile.RemoveAll("app/resource/public/assets")
 		}
-		_ = gfile.Move("/app/resource/assets/", "/app/resource/public/")
-		_ = gfile.Move("/app/resource/favicon.ico", "/app/resource/public/")
-		_ = gfile.Move("/app/resource/index.html", "/app/resource/public/")
+		_ = gfile.Move("app/resource/assets/", "app/resource/public/")
+		_ = gfile.Move("app/resource/favicon.ico", "app/resource/public/")
+		_ = gfile.Move("app/resource/index.html", "app/resource/public/")
 	}
 
 }
