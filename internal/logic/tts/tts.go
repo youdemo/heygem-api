@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gfile"
 	"github.com/gogf/gf/v2/os/gtime"
 	"github.com/gogf/gf/v2/util/grand"
 	"heygem-api/internal/boot"
@@ -29,7 +30,13 @@ func init() {
 }
 
 func (s *sTts) Train(ctx context.Context, inp *ttsin.TrainInp) (res *ttsin.TrainOut, err error) {
-
+	filename, err := inp.File.Save(util.JoinPaths(boot.VideoPath, consts.Temp), true)
+	if err != nil {
+		return
+	}
+	defer func() { _ = gfile.RemoveFile(util.JoinPaths(boot.VideoPath, consts.Temp, filename)) }()
+	res = &ttsin.TrainOut{}
+	res.Text, err = tts.Train(ctx, util.JoinPaths(boot.VideoPath, consts.Temp, filename))
 	return
 }
 
