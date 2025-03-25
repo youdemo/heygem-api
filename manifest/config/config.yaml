@@ -66,6 +66,8 @@ database:
 
 
 heygem:
+  web:
+    enabled: false
   path:
     video: 'D:/heygem_data/face2face'
   tts: http://10.8.5.210:7861
